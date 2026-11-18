@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
 
-pkgs.mkShell {
+pkgs.mkShell rec {
   nativeBuildInputs = with pkgs; [
     gnumake
     cmake
@@ -17,6 +17,9 @@ pkgs.mkShell {
     libXi
     xorgproto
     libGL
+    alsa-lib
+    libpulseaudio
+    pipewire
   ];
 
   LIBCLANG_PATH = pkgs.lib.makeLibraryPath [ pkgs.llvmPackages.libclang.lib ];
@@ -29,12 +32,5 @@ pkgs.mkShell {
     libXi
   ]);
 
-  LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (with pkgs; [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libGL
-  ]);
+  LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
 }
